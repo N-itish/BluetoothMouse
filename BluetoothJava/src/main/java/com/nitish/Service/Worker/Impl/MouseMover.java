@@ -18,8 +18,9 @@ public class MouseMover implements WorkerService {
         xOffset = 2;
         yOffset = 1;
     }
-    public void execute(byte[] data) {
+    public void execute(byte[] data) throws AWTException{
         String message = new String(data);
+        robot = new Robot();
         if(message.equalsIgnoreCase("left")){
             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
@@ -29,15 +30,10 @@ public class MouseMover implements WorkerService {
             robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
         }
         else {
-            String coordinates[] = new String(data).split(":");
+            String coordinates[] = message.split(":");
             int xCoord = ((int) round(Double.parseDouble(coordinates[0]))) * xOffset;
             int yCoord = ((int) round(Double.parseDouble(coordinates[1]))) * yOffset;
-            try {
-                Robot robot = new Robot();
-                robot.mouseMove(xCoord, yCoord);
-            } catch (AWTException awt) {
-                awt.printStackTrace();
-            }
+            robot.mouseMove(xCoord, yCoord);
         }
      }
 }

@@ -1,5 +1,7 @@
 package com.nitish.Handlers;
 import com.nitish.Service.Worker.WorkerService;
+
+import java.awt.*;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -58,8 +60,12 @@ public class ReadHandler implements Runnable{
 		executeWorker(message);
 	}
 
-	public void executeWorker(byte[] message){
-		worker.execute(message);
+	public void executeWorker(byte[] message)  {
+		try {
+			worker.execute(message);
+		}catch (AWTException awt){
+			awt.printStackTrace();
+		}
 	}
 
 }
