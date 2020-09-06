@@ -5,7 +5,7 @@ How to use:
 
 1) Run the bluetooth server code placed in BluetoothJava in pc
 2) Run the code in BluetoothAndroid in android device
-2) Connect to the server from the android device:
+2) Connect to the server from the android device:<br>
   a) Scan nearby device using the button<br>
   b) Once scanned the device name will be shown in the list below the button<br>
   c) Click on the name of the pc in which the server is running<br>
