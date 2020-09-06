@@ -12,11 +12,11 @@
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="67dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pairedDevices"
+        app:layout_constraintTop_toBottomOf="@+id/startBluetooth"
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
@@ -24,25 +24,15 @@
 
     <Button
         android:id="@+id/startBluetooth"
-        android:layout_width="380dp"
+        android:layout_width="361dp"
         android:layout_height="57dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
         android:text="Scan Devices"
-        app:layout_constraintBottom_toTopOf="@+id/pairedDevices"
+        app:layout_constraintBottom_toTopOf="@+id/deviceList"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.419"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/pairedDevices"
-        android:layout_width="398dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="39dp"
-        android:text="Show Paired Devices"
-        app:layout_constraintBottom_toTopOf="@+id/deviceList"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startBluetooth" />
 </android.support.constraint.ConstraintLayout>

@@ -46,21 +46,21 @@ public class MainActivity extends AppCompatActivity {
         bluBroadCastReciever = new BluetoothBroadCastReciever(bluetoothArrayAdapter);
 
         Button findBluetoothDevices = (Button) findViewById(R.id.startBluetooth);
-        Button findPairedDevice = (Button) findViewById(R.id.pairedDevices);
+        //Button findPairedDevice = (Button) findViewById(R.id.pairedDevices);
 
-        findPairedDevice.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bluetoothArrayAdapter.clear();
-                bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                for(BluetoothDevice pairedDevice: bluetoothAdapter.getBondedDevices()){
-                    pairedDevices.put(pairedDevice.getName(),pairedDevice);
-                    bluetoothArrayAdapter.add(pairedDevice.getName());
-                }
-                bluetoothArrayAdapter.notifyDataSetChanged();
-
-            }
-        });
+//        findPairedDevice.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                bluetoothArrayAdapter.clear();
+//                bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                for(BluetoothDevice pairedDevice: bluetoothAdapter.getBondedDevices()){
+//                    pairedDevices.put(pairedDevice.getName(),pairedDevice);
+//                    bluetoothArrayAdapter.add(pairedDevice.getName());
+//                }
+//                bluetoothArrayAdapter.notifyDataSetChanged();
+//
+//            }
+//        });
         deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
