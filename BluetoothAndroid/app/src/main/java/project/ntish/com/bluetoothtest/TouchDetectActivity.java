@@ -44,6 +44,7 @@ public class TouchDetectActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(isConnected){
                     ConnectedThread messageSender = new ConnectedThread(socket,"right");
+                    messageSender.start();
                 }
             }
         });
