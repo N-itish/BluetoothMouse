@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import bluetooth.BluetoothClient;
-import bluetooth.connectedThread;
+import bluetooth.ConnectedThread;
 
 public class MessageSender extends AppCompatActivity {
 
@@ -50,7 +50,7 @@ public class MessageSender extends AppCompatActivity {
                 BluetoothSocket socket = connect.getSocket();
                 if (socket != null) {
                     connectionStatus.setBackgroundColor(ContextCompat.getColor(getApplicationContext(),R.color.green));
-                    connectedThread sender = new connectedThread(socket, message.getText().toString());
+                    ConnectedThread sender = new ConnectedThread(socket, message.getText().toString());
                     sender.start();
                 }
                 else {

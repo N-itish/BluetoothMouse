@@ -13,12 +13,12 @@ import java.nio.charset.StandardCharsets;
  * Created by Lenovo on 08/08/2020.
  */
 
-public class connectedThread extends Thread {
+public class ConnectedThread extends Thread {
     private InputStream input;
     private DataOutputStream output;
     private BluetoothSocket socket;
     private String message;
-    public connectedThread(BluetoothSocket socket,String message){
+    public ConnectedThread(BluetoothSocket socket, String message){
         this.socket = socket;
         this.message = message;
 

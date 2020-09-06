@@ -12,11 +12,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import bluetooth.BluetoothClient;
-import bluetooth.connectedThread;
+import bluetooth.ConnectedThread;
 
 public class TouchDetectActivity extends AppCompatActivity {
-    private boolean isConnected = false;
     private BluetoothSocket socket;
+    private boolean isConnected = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,10 +29,29 @@ public class TouchDetectActivity extends AppCompatActivity {
 
         BluetoothDevice device = getIntent().getExtras().getParcelable("bluetoothDevice");
         final BluetoothClient connectDevices = new BluetoothClient(device);
+
+        left.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                 if(isConnected) {
+                     ConnectedThread messageSender = new ConnectedThread(socket,"left");
+                     messageSender.start();
+                 }
+            }
+        });
+        right.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isConnected){
+                    ConnectedThread messageSender = new ConnectedThread(socket,"right");
+                }
+            }
+        });
+
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!isConnected){
+              if(!isConnected){
                     try{
                         connectDevices.start();
                         socket = connectDevices.getSocket();
@@ -51,7 +70,7 @@ public class TouchDetectActivity extends AppCompatActivity {
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                connectedThread messageSender = new connectedThread(socket,event.getX()+":"+event.getY());
+                ConnectedThread messageSender = new ConnectedThread(socket,event.getX()+":"+event.getY());
                 messageSender.start();
                 Log.v("coordinates","X:"+event.getX()+" Y:"+event.getY());
                 return true;
