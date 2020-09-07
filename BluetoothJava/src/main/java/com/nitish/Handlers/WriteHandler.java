@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class WriteHandler implements Runnable{
     private BufferedWriter writer;
-    private DataOutputStream dataOutputStream;
+    private final DataOutputStream dataOutputStream;
     private Scanner userInput;
 
     public WriteHandler(OutputStream outputStream){

@@ -21,7 +21,6 @@ public class BluetoothServer {
         acceptConnection();
         showConnectedDevice(connection);
         readData(connection);
-
     }
 
     private void acceptConnection() throws IOException{

@@ -61,11 +61,7 @@ public class ReadHandler implements Runnable{
 	}
 
 	public void executeWorker(byte[] message)  {
-		try {
-			worker.execute(message);
-		}catch (AWTException awt){
-			awt.printStackTrace();
-		}
+		worker.execute(message);
 	}
 
 }
