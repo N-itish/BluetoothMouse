@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -73,7 +72,6 @@ public class TouchDetectActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 ConnectedThread messageSender = new ConnectedThread(socket,event.getX()+":"+event.getY());
                 messageSender.start();
-                Log.v("coordinates","X:"+event.getX()+" Y:"+event.getY());
                 return true;
             }
         });

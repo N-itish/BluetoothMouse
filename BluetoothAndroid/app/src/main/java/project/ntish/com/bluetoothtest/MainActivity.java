@@ -15,9 +15,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import broadCastRecievers.BluetoothBroadCastReciever;
 
 
@@ -26,11 +23,11 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_ENABLE_BT = 1;
     static final int REQUEST_COARSE_LOCATION_SERVICE = 2;
     static final int REQUEST_FINE_LOCATION_SERVICE = 3;
-    private ArrayAdapter<String> bluetoothArrayAdapter;
-    private HashMap<String,String> deviceMap = new HashMap<>();
+
+    private ArrayAdapter<String> arrayAdapter;
     private BluetoothBroadCastReciever bluBroadCastReciever;
     private BluetoothAdapter bluetoothAdapter;
-    private Map<String,BluetoothDevice> pairedDevices;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,34 +35,21 @@ public class MainActivity extends AppCompatActivity {
         //requesting the permissions for loaction
         this.requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_COARSE_LOCATION_SERVICE);
         this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_FINE_LOCATION_SERVICE);
+
         ListView deviceList = (ListView) findViewById(R.id.deviceList);
-        bluetoothArrayAdapter = new ArrayAdapter<String>(this,
+        arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1 );
-        deviceList.setAdapter(bluetoothArrayAdapter);
-        //broadcastlistners
-        bluBroadCastReciever = new BluetoothBroadCastReciever(bluetoothArrayAdapter);
+        deviceList.setAdapter(arrayAdapter);
 
-        Button findBluetoothDevices = (Button) findViewById(R.id.startBluetooth);
-        //Button findPairedDevice = (Button) findViewById(R.id.pairedDevices);
+        bluBroadCastReciever = new BluetoothBroadCastReciever(arrayAdapter);
+        Button findBluetoothDevices = findViewById(R.id.startBluetooth);
 
-//        findPairedDevice.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                bluetoothArrayAdapter.clear();
-//                bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//                for(BluetoothDevice pairedDevice: bluetoothAdapter.getBondedDevices()){
-//                    pairedDevices.put(pairedDevice.getName(),pairedDevice);
-//                    bluetoothArrayAdapter.add(pairedDevice.getName());
-//                }
-//                bluetoothArrayAdapter.notifyDataSetChanged();
-//
-//            }
-//        });
+        //on selecting the device move to connection page
         deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //getting the bluetoothdevice for the selected device
                 BluetoothDevice selectedDevice = bluBroadCastReciever.getDevices().get(position);
-                Log.v("bluetoothDevice","Connecting to device: " + selectedDevice.getName());
                 Intent intent = new Intent(getApplicationContext(),TouchDetectActivity.class);
                 intent.putExtra("bluetoothDevice",selectedDevice);
                 startActivity(intent);
@@ -78,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                 //Clearing the previous data
-                if(bluetoothArrayAdapter != null) {
-                    bluetoothArrayAdapter.clear();
+                if(arrayAdapter != null) {
+                    arrayAdapter.clear();
+                    arrayAdapter.notifyDataSetChanged();
                 }
                 //TODO: enable location service as well as the bluetooth
                 if (!bluetoothAdapter.isEnabled()) {
@@ -114,9 +99,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy(){
-        super.onDestroy();
         if(bluBroadCastReciever != null) {
             unregisterReceiver(bluBroadCastReciever);
         }
+        super.onDestroy();
+
     }
 }
