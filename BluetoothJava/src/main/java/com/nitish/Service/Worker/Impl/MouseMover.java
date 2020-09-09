@@ -7,10 +7,12 @@ import java.awt.event.InputEvent;
 import java.io.*;
 import java.util.Properties;
 
-import static java.lang.Math.ceil;
-import static java.lang.Math.round;
+
+
+import static java.lang.Math.*;
 
 public class MouseMover implements WorkerService {
+
     private  int xOffset;
     private  int yOffset;
     private Robot robot;
@@ -19,6 +21,7 @@ public class MouseMover implements WorkerService {
         loadProperties();
         initializeRobot();
     }
+
 
     private void initializeRobot(){
         try{
@@ -39,7 +42,7 @@ public class MouseMover implements WorkerService {
             robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
         }
         else {
-            String[] coordinates = message.split(":");
+            String[] coordinates = splitString(message,':');
             int xCoord = ((int) round(Double.parseDouble(coordinates[0]))) * xOffset;
             int yCoord = ((int) round(Double.parseDouble(coordinates[1]))) * yOffset;
             robot.mouseMove(xCoord, yCoord);
@@ -64,5 +67,35 @@ public class MouseMover implements WorkerService {
         double y = Double.parseDouble(props.getProperty("compY"))/Double.parseDouble(props.getProperty("andrY"));
         xOffset =  (int) ceil(x);
         yOffset =  (int) ceil(y);
+    }
+
+    private String[] splitString(String data,char splitBy){
+        int count = 0;
+        int divisions = 0;
+        int position = 0;
+        String[] splits;
+        StringBuilder builder = new StringBuilder();
+        while(count < data.length()){
+            if(data.charAt(count) == splitBy){
+                divisions++;
+            }
+            count++;
+        }
+        count = 0;
+        splits = new String[divisions+1];
+        while(count < data.length()){
+
+            if(data.charAt(count) == splitBy)
+            {
+                splits[position] = builder.toString();
+                builder = new StringBuilder();
+                position++;
+                count++;
+            }
+            builder.append(data.charAt(count));
+            count++;
+        }
+        splits[position] = builder.toString();
+        return splits;
     }
 }
