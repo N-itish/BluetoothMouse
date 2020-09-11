@@ -14,8 +14,11 @@ import java.io.IOException;
 
 public class BluetoothServer {
     private static final int UUIDVALUE = 80087355;
+    private static final int BLUETOOTH_NOT_TURNED_ON = 1;
     private final WorkerService worker;
     private StreamConnection connection = null;
+
+
     public BluetoothServer(WorkerService worker){
         this.worker = worker;
     }
@@ -30,6 +33,7 @@ public class BluetoothServer {
         {
             System.out.println("Bluetooth Is Not Turned On!!!");
             System.out.println("Turn On Bluetooth Manually!!!");
+            System.exit(BLUETOOTH_NOT_TURNED_ON);
         }
     }
 
