@@ -1,13 +1,16 @@
 package com.nitish.BluetoothServer;
 
+
+import com.intel.bluetooth.BlueCoveImpl;
 import com.nitish.Handlers.ReadHandler;
 import com.nitish.Service.Worker.WorkerService;
-import javax.bluetooth.RemoteDevice;
+
+import javax.bluetooth.*;
 import javax.microedition.io.Connector;
 import javax.microedition.io.StreamConnection;
-import javax.bluetooth.UUID;
 import javax.microedition.io.StreamConnectionNotifier;
 import java.io.IOException;
+
 
 public class BluetoothServer {
     private static final int UUIDVALUE = 80087355;
@@ -18,10 +21,23 @@ public class BluetoothServer {
     }
 
     public void startServer() throws IOException{
-        acceptConnection();
-        showConnectedDevice(connection);
-        readData(connection);
+        if(isBluetoothOn()) {
+            acceptConnection();
+            showConnectedDevice(connection);
+            readData(connection);
+        }
+        else
+        {
+            System.out.println("Bluetooth Is Not Turned On!!!");
+            System.out.println("Turn On Bluetooth Manually!!!");
+        }
     }
+
+    private boolean isBluetoothOn(){
+        return LocalDevice.isPowerOn();
+    }
+
+
 
     private void acceptConnection() throws IOException{
         UUID uuid = new UUID(UUIDVALUE);
