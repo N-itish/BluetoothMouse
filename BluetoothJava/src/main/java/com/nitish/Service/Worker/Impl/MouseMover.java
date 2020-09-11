@@ -22,33 +22,6 @@ public class MouseMover implements WorkerService {
         initializeRobot();
     }
 
-
-    private void initializeRobot(){
-        try{
-            robot = new Robot();
-        }catch (AWTException awt){
-            awt.printStackTrace();
-        }
-    }
-
-    public void execute(byte[] data){
-        String message = new String(data);
-        if(message.equalsIgnoreCase("left")){
-            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        }
-        else if(message.equalsIgnoreCase("right")){
-            robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
-            robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
-        }
-        else {
-            String[] coordinates = splitString(message,':');
-            int xCoord = ((int) round(Double.parseDouble(coordinates[0]))) * xOffset;
-            int yCoord = ((int) round(Double.parseDouble(coordinates[1]))) * yOffset;
-            robot.mouseMove(xCoord, yCoord);
-        }
-     }
-
     private void loadProperties(){
         String filePath = "src/main/Resources/resolutions.properties";
         File file = new File(filePath);
@@ -61,6 +34,38 @@ public class MouseMover implements WorkerService {
             ioe.printStackTrace();
         }
     }
+
+    private void initializeRobot(){
+        try{
+            robot = new Robot();
+        }catch (AWTException awt){
+            awt.printStackTrace();
+        }
+    }
+
+    public void execute(byte[] data){
+        String message = new String(data);
+        moveMouse(message);
+    }
+
+     private void moveMouse(String message){
+         if(message.equalsIgnoreCase("left")){
+             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+         }
+         else if(message.equalsIgnoreCase("right")){
+             robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
+             robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
+         }
+         else {
+             String[] coordinates = splitString(message,':');
+             int xCoord = ((int) round(Double.parseDouble(coordinates[0]))) * xOffset;
+             int yCoord = ((int) round(Double.parseDouble(coordinates[1]))) * yOffset;
+             robot.mouseMove(xCoord, yCoord);
+         }
+     }
+
+
 
     private void setOffsets(Properties props){
         double x = Double.parseDouble(props.getProperty("compX"))/Double.parseDouble(props.getProperty("andrX"));
@@ -88,7 +93,7 @@ public class MouseMover implements WorkerService {
             if(data.charAt(count) == splitBy)
             {
                 splits[position] = builder.toString();
-                builder = new StringBuilder();
+                builder.delete(0,builder.length());
                 position++;
                 count++;
             }
