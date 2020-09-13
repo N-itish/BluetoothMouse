@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,9 +24,8 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_FINE_LOCATION_SERVICE = 3;
 
     private ArrayAdapter<String> arrayAdapter;
-    private BluetoothBroadCastReciever bluBroadCastReciever;
     private BluetoothAdapter bluetoothAdapter;
-
+    private BluetoothBroadCastReciever bluBroadCastReciever;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,19 +38,20 @@ public class MainActivity extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1 );
         deviceList.setAdapter(arrayAdapter);
-
-        bluBroadCastReciever = new BluetoothBroadCastReciever(arrayAdapter);
         Button findBluetoothDevices = findViewById(R.id.startBluetooth);
-
+        bluBroadCastReciever = new BluetoothBroadCastReciever(arrayAdapter);
         //on selecting the device move to connection page
         deviceList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //getting the bluetoothdevice for the selected device
-                BluetoothDevice selectedDevice = bluBroadCastReciever.getDevices().get(position);
-                Intent intent = new Intent(getApplicationContext(),TouchDetectActivity.class);
-                intent.putExtra("bluetoothDevice",selectedDevice);
-                startActivity(intent);
+                String deviceName = (String) deviceList.getItemAtPosition(position);
+                BluetoothDevice selectedDevice = bluBroadCastReciever.getDevices(deviceName);
+                if(selectedDevice != null) {
+                    Intent intent = new Intent(getApplicationContext(), TouchDetectActivity.class);
+                    intent.putExtra("bluetoothDevice", selectedDevice);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -61,25 +60,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                //Clearing the previous data
-                if(arrayAdapter != null) {
-                    arrayAdapter.clear();
-                    arrayAdapter.notifyDataSetChanged();
-                }
-                //TODO: enable location service as well as the bluetooth
                 if (!bluetoothAdapter.isEnabled()) {
-                    Log.v("BroadcastReceiver","Turning on Bluetooth");
                     Intent turnOnBluetooth = new Intent(bluetoothAdapter.ACTION_REQUEST_ENABLE);
                     startActivityForResult(turnOnBluetooth, REQUEST_ENABLE_BT);
 
                 }
-                startbluetooth(bluetoothAdapter);
+                startBluetooth();
+
             }
         });
     }
 
 
-    public void startbluetooth(BluetoothAdapter bluetoothAdapter) {
+
+
+    public void startBluetooth() {
 
         //getting the bluetooth adapter
         //if bluetooth is found then turn on the bluetooth
