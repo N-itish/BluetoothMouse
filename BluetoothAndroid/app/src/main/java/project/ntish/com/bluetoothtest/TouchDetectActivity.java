@@ -15,7 +15,7 @@ import bluetooth.ConnectedThread;
 
 public class TouchDetectActivity extends AppCompatActivity {
     private BluetoothSocket socket;
-    private boolean isConnected = false;
+    private boolean isConnectionStarted = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,34 +32,30 @@ public class TouchDetectActivity extends AppCompatActivity {
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 if(isConnected) {
-                     ConnectedThread messageSender = new ConnectedThread(socket,"left");
-                     messageSender.start();
-                 }
+                if(isConnectionStarted) {
+                    ConnectedThread messageSender = new ConnectedThread(socket, "left");
+                    messageSender.start();
+                }
             }
         });
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnected){
-                    ConnectedThread messageSender = new ConnectedThread(socket,"right");
+                if(isConnectionStarted) {
+                    ConnectedThread messageSender = new ConnectedThread(socket, "right");
                     messageSender.start();
                 }
+
             }
         });
 
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              if(!isConnected){
-                    try{
-                        connectDevices.start();
-                        socket = connectDevices.getSocket();
-                    }catch(Exception exc){
-                        Toast.makeText(getApplicationContext(),"Connection failed, try again!!!",Toast.LENGTH_LONG).show();
-                    }
-                    isConnected = true;
-                }
+              if(!isConnectionStarted){
+                  connectDevices.start();
+                  socket = connectDevices.getSocket();
+              }
                 else
                 {
                     Toast.makeText(getApplicationContext(),"Already connected to server!!!",Toast.LENGTH_LONG).show();
@@ -70,8 +66,10 @@ public class TouchDetectActivity extends AppCompatActivity {
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                ConnectedThread messageSender = new ConnectedThread(socket,event.getX()+":"+event.getY());
-                messageSender.start();
+                if(isConnectionStarted) {
+                    ConnectedThread messageSender = new ConnectedThread(socket, event.getX() + ":" + event.getY());
+                    messageSender.start();
+                }
                 return true;
             }
         });

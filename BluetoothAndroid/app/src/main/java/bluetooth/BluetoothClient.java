@@ -13,21 +13,21 @@ import java.util.UUID;
 public class BluetoothClient extends Thread{
 
     private BluetoothSocket clientScoket;
+    private BluetoothDevice myDevice;
     private static final String myUUID = "04c6093b-0000-1000-8000-00805f9b34fb";
 
     public BluetoothClient(BluetoothDevice myDevice){
         try{
+            this.myDevice = myDevice;
             clientScoket = myDevice.createRfcommSocketToServiceRecord(UUID.fromString(myUUID));
         }catch (IOException ioe){
             Log.v("BluetoothClient","Socket Creation failed");
         }
     }
 
+
     public BluetoothSocket getSocket(){
-        if(clientScoket != null) {
-            return clientScoket;
-        }
-        return null;
+        return clientScoket;
     }
 
     public void run(){

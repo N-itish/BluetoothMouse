@@ -17,10 +17,8 @@ public class BluetoothBroadCastReciever extends BroadcastReceiver{
     private ArrayAdapter arrayAdapter;
     private ArrayList<BluetoothDevice> foundDevices;
     private ArrayList<String> presentDevices;
-    private boolean isListReady;
-    private String previous;
     public BluetoothBroadCastReciever(ArrayAdapter arrayAdapter){
-        isListReady = false;
+
         this.arrayAdapter = arrayAdapter;
         this.foundDevices = new ArrayList<>();
         this.presentDevices = new ArrayList<>();
@@ -46,7 +44,6 @@ public class BluetoothBroadCastReciever extends BroadcastReceiver{
 
         else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
             Log.v("BroadcastReceiver", "Bluetooth discovery finished");
-            isListReady = true;
 
         }
         //Detect when a device has been found
