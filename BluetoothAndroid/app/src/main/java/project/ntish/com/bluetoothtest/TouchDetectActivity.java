@@ -5,17 +5,19 @@ import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import bluetooth.ConnectionStatus;
 import bluetooth.BluetoothClient;
 import bluetooth.ConnectedThread;
 
 public class TouchDetectActivity extends AppCompatActivity {
     private BluetoothSocket socket;
-    private boolean isConnectionStarted = false;
+    private ConnectionStatus connectionStatus;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,24 +29,24 @@ public class TouchDetectActivity extends AppCompatActivity {
         ConstraintLayout layout = findViewById(R.id.mousePad);
 
         BluetoothDevice device = getIntent().getExtras().getParcelable("bluetoothDevice");
-        final BluetoothClient connectDevices = new BluetoothClient(device);
 
+        connectionStatus = new ConnectionStatus();
         left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnectionStarted) {
-                    ConnectedThread messageSender = new ConnectedThread(socket, "left");
+                if(connectionStatus.getConnectionStatus()) {
+                    ConnectedThread messageSender = new ConnectedThread(socket, "left",connectionStatus);
                     messageSender.start();
+
                 }
             }
         });
         right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(isConnectionStarted) {
-                    ConnectedThread messageSender = new ConnectedThread(socket, "right");
+                if(connectionStatus.getConnectionStatus()) {
+                    ConnectedThread messageSender = new ConnectedThread(socket, "right",connectionStatus);
                     messageSender.start();
-                    isConnectionStarted = true;
                 }
 
             }
@@ -53,9 +55,11 @@ public class TouchDetectActivity extends AppCompatActivity {
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              if(!isConnectionStarted){
+              if(!connectionStatus.getConnectionStatus()){
+                  BluetoothClient connectDevices = new BluetoothClient(device);
                   connectDevices.start();
                   socket = connectDevices.getSocket();
+                  connectionStatus.setConnectionStatus(true);
               }
                 else
                 {
@@ -67,8 +71,8 @@ public class TouchDetectActivity extends AppCompatActivity {
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(isConnectionStarted) {
-                    ConnectedThread messageSender = new ConnectedThread(socket, event.getX() + ":" + event.getY());
+                if(connectionStatus.getConnectionStatus()) {
+                    ConnectedThread messageSender = new ConnectedThread(socket, event.getX() + ":" + event.getY(),connectionStatus);
                     messageSender.start();
                 }
                 return true;
