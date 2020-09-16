@@ -44,6 +44,7 @@ public class TouchDetectActivity extends AppCompatActivity {
                 if(isConnectionStarted) {
                     ConnectedThread messageSender = new ConnectedThread(socket, "right");
                     messageSender.start();
+                    isConnectionStarted = true;
                 }
 
             }
