@@ -1,7 +1,5 @@
 package com.nitish.Handlers;
 import com.nitish.Service.Worker.WorkerService;
-
-import java.awt.*;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -23,7 +21,6 @@ public class ReadHandler implements Runnable{
 		dataInputStream = new DataInputStream(inputStream);
 		System.out.println("Started reading data from the client!!");
 		try {
-
 			readInput();
 		}
 		catch(IOException ioe) {

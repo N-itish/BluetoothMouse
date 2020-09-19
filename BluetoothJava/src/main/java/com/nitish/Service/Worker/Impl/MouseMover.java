@@ -5,6 +5,7 @@ import com.nitish.Service.Worker.WorkerService;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.io.*;
+import java.util.HashMap;
 import java.util.Properties;
 
 
@@ -15,6 +16,7 @@ public class MouseMover implements WorkerService {
 
     private  int xOffset;
     private  int yOffset;
+    private  boolean releaseMouse = false;
     private Robot robot;
 
     public MouseMover(){
@@ -35,6 +37,13 @@ public class MouseMover implements WorkerService {
         }
     }
 
+    private void setOffsets(Properties props){
+        double x = Double.parseDouble(props.getProperty("compX"))/Double.parseDouble(props.getProperty("andrX"));
+        double y = Double.parseDouble(props.getProperty("compY"))/Double.parseDouble(props.getProperty("andrY"));
+        xOffset =  (int) ceil(x);
+        yOffset =  (int) ceil(y);
+    }
+
     private void initializeRobot(){
         try{
             robot = new Robot();
@@ -53,6 +62,21 @@ public class MouseMover implements WorkerService {
              robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
              robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
          }
+         else if(message.equalsIgnoreCase("sTap")){
+             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+         }
+         else if(message.equalsIgnoreCase("dTap")){
+             if(!releaseMouse){
+                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                releaseMouse = true;
+             }
+             else
+             {
+                 robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+                 releaseMouse = false;
+             }
+         }
          else if(message.equalsIgnoreCase("right")){
              robot.mousePress(InputEvent.BUTTON3_DOWN_MASK);
              robot.mouseRelease(InputEvent.BUTTON3_DOWN_MASK);
@@ -65,15 +89,15 @@ public class MouseMover implements WorkerService {
          }
      }
 
-
-
-    private void setOffsets(Properties props){
-        double x = Double.parseDouble(props.getProperty("compX"))/Double.parseDouble(props.getProperty("andrX"));
-        double y = Double.parseDouble(props.getProperty("compY"))/Double.parseDouble(props.getProperty("andrY"));
-        xOffset =  (int) ceil(x);
-        yOffset =  (int) ceil(y);
-    }
-
+     private String SetMouseMotions(String message){
+        HashMap<String,String> mouseMotion = new HashMap<String, String>();
+        mouseMotion.put("left","clickLeft()");
+        mouseMotion.put("right","clickRight()");
+        mouseMotion.put("move","moveMouse()");
+        mouseMotion.put("dtap","dragMouse()");
+        mouseMotion.put("stap","clickLeft()");
+        return mouseMotion.get(message);
+     }
     private String[] splitString(String data,char splitBy){
         int count = 0;
         int divisions = 0;

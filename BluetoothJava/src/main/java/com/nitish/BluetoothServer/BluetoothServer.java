@@ -1,7 +1,5 @@
 package com.nitish.BluetoothServer;
 
-
-import com.intel.bluetooth.BlueCoveImpl;
 import com.nitish.Handlers.ReadHandler;
 import com.nitish.Service.Worker.WorkerService;
 
@@ -24,24 +22,26 @@ public class BluetoothServer {
     }
 
     public void startServer() throws IOException{
-        if(isBluetoothOn()) {
+        if(!isBluetoothOn()) {
+            shutdownProgram();
+        }
+        else
+        {
             acceptConnection();
             showConnectedDevice(connection);
             readData(connection);
         }
-        else
-        {
-            System.out.println("Bluetooth Is Not Turned On!!!");
-            System.out.println("Turn On Bluetooth Manually!!!");
-            System.exit(BLUETOOTH_NOT_TURNED_ON);
-        }
     }
 
-    private boolean isBluetoothOn(){
+    private boolean isBluetoothOn()  {
         return LocalDevice.isPowerOn();
     }
 
-
+    private void shutdownProgram(){
+        System.out.println("Bluetooth Is Not Turned On!!!");
+        System.out.println("Turn On Bluetooth Manually!!!");
+        System.exit(BLUETOOTH_NOT_TURNED_ON);
+    }
 
     private void acceptConnection() throws IOException{
         UUID uuid = new UUID(UUIDVALUE);

@@ -1,13 +1,9 @@
 package com.nitish.BluetoothServer;
+import com.nitish.Service.Worker.Impl.ConsolePrinter;
 import com.nitish.Service.Worker.Impl.MouseMover;
 import com.nitish.Service.Worker.WorkerService;
-
 import java.io.IOException;
 
-/**
- * Hello world!
- *
- */
 public class Application
 {
 
