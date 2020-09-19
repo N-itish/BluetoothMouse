@@ -6,14 +6,15 @@ import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import bluetooth.ConnectionStatus;
 import bluetooth.BluetoothClient;
 import bluetooth.ConnectedThread;
+import bluetooth.ConnectionStatus;
 
 public class TouchDetectActivity extends AppCompatActivity {
     private BluetoothSocket socket;
@@ -28,8 +29,8 @@ public class TouchDetectActivity extends AppCompatActivity {
         Button connect = findViewById(R.id.startConnection);
         ConstraintLayout layout = findViewById(R.id.mousePad);
 
-        BluetoothDevice device = getIntent().getExtras().getParcelable("bluetoothDevice");
 
+        BluetoothDevice device = getIntent().getExtras().getParcelable("bluetoothDevice");
         connectionStatus = new ConnectionStatus();
         left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +56,7 @@ public class TouchDetectActivity extends AppCompatActivity {
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
               if(!connectionStatus.getConnectionStatus()){
                   BluetoothClient connectDevices = new BluetoothClient(device);
                   connectDevices.start();
@@ -69,8 +71,32 @@ public class TouchDetectActivity extends AppCompatActivity {
         });
 
         layout.setOnTouchListener(new View.OnTouchListener() {
+            //detecting the double tap and single tap
+            private GestureDetector gestureDetector = new GestureDetector(TouchDetectActivity.this, new GestureDetector.SimpleOnGestureListener() {
+                @Override
+                public boolean onDoubleTap(MotionEvent event) {
+                    Log.v("messageSender","dTap");
+                    if(connectionStatus.getConnectionStatus()) {
+                        ConnectedThread messageSender = new ConnectedThread(socket, "dTap", connectionStatus);
+                        messageSender.start();
+                    }
+                    return super.onDoubleTap(event);
+                }
+
+                @Override
+                public boolean onSingleTapUp(MotionEvent event) {
+                    if(connectionStatus.getConnectionStatus()){
+                        Log.v("messageSender","single tap");
+                        ConnectedThread messageSender = new ConnectedThread(socket,"sTap",connectionStatus);
+                        messageSender.start();
+                    }
+                    return super.onSingleTapUp(event);
+                }
+            });
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                gestureDetector.onTouchEvent(event);
                 if(connectionStatus.getConnectionStatus()) {
                     ConnectedThread messageSender = new ConnectedThread(socket, event.getX() + ":" + event.getY(),connectionStatus);
                     messageSender.start();
@@ -79,4 +105,5 @@ public class TouchDetectActivity extends AppCompatActivity {
             }
         });
     }
+
 }
