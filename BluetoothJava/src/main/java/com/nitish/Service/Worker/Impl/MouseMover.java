@@ -16,10 +16,14 @@ public class MouseMover implements WorkerService {
 
     private  int xOffset;
     private  int yOffset;
+    private static int xPrev;
+    private static int yPrev;
     private  boolean releaseMouse = false;
     private Robot robot;
 
     public MouseMover(){
+        xPrev = 0;
+        yPrev = 0;
         loadProperties();
         initializeRobot();
     }
@@ -58,6 +62,7 @@ public class MouseMover implements WorkerService {
     }
 
      private void moveMouse(String message){
+
          if(message.equalsIgnoreCase("left")){
              robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
              robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
@@ -83,9 +88,11 @@ public class MouseMover implements WorkerService {
          }
          else {
              String[] coordinates = splitString(message,':');
-             int xCoord = ((int) round(Double.parseDouble(coordinates[0]))) * xOffset;
-             int yCoord = ((int) round(Double.parseDouble(coordinates[1]))) * yOffset;
-             robot.mouseMove(xCoord, yCoord);
+             int xCoord = ((int) round(Double.parseDouble(coordinates[0]))) ;
+             int yCoord = ((int) round(Double.parseDouble(coordinates[1]))) ;
+             xPrev = xCoord;
+             yPrev = yCoord;
+             robot.mouseMove(xCoord+xPrev, yCoord+yPrev);
          }
      }
 
