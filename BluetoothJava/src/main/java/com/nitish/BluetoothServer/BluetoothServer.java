@@ -21,16 +21,21 @@ public class BluetoothServer {
         this.worker = worker;
     }
 
-    public void startServer() throws IOException{
+    public void startServer() {
         if(!isBluetoothOn()) {
             shutdownProgram();
         }
         else
         {
-            acceptConnection();
-            showConnectedDevice(connection);
-            readData(connection);
+            try {
+                acceptConnection();
+                showConnectedDevice(connection);
+                readData(connection);
+            }catch (IOException ioe){
+                ioe.printStackTrace();
+            }
         }
+
     }
 
     private boolean isBluetoothOn()  {
