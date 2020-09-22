@@ -77,7 +77,7 @@ public class TouchDetectActivity extends AppCompatActivity {
                 public boolean onDoubleTap(MotionEvent event) {
                     Log.v("messageSender","dTap");
                     if(connectionStatus.getConnectionStatus()) {
-                        ConnectedThread messageSender = new ConnectedThread(socket, "dTap", connectionStatus);
+                        ConnectedThread messageSender = new ConnectedThread(socket, "left", connectionStatus);
                         messageSender.start();
                     }
                     return super.onDoubleTap(event);
@@ -87,12 +87,21 @@ public class TouchDetectActivity extends AppCompatActivity {
                 public boolean onSingleTapUp(MotionEvent event) {
                     if(connectionStatus.getConnectionStatus()){
                         Log.v("messageSender","single tap");
-                        ConnectedThread messageSender = new ConnectedThread(socket,"sTap",connectionStatus);
+                        ConnectedThread messageSender = new ConnectedThread(socket,"right",connectionStatus);
                         messageSender.start();
                     }
                     return super.onSingleTapUp(event);
                 }
+
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    if(connectionStatus.getConnectionStatus()){
+                        ConnectedThread messageSender = new ConnectedThread(socket,"drag",connectionStatus);
+                        messageSender.start();
+                    }
+                }
             });
+
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {

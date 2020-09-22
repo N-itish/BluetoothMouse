@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     static final int REQUEST_ENABLE_LOCATION  = 2;
     static final int REQUEST_COARSE_LOCATION_SERVICE = 3;
     static final int REQUEST_FINE_LOCATION_SERVICE = 4;
-    static final String DEVICE_STATUS = "deviceStatus";
 
     private ArrayAdapter<String> arrayAdapter;
     private BluetoothAdapter bluetoothAdapter;
@@ -44,8 +43,6 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1);
         deviceList.setAdapter(arrayAdapter);
         Button findBluetoothDevices = findViewById(R.id.startBluetooth);
-
-        pref = getSharedPreferences(DEVICE_STATUS,MODE_PRIVATE);
         bluBroadCastReciever = new BluetoothBroadCastReciever(arrayAdapter);
 
 
