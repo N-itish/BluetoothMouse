@@ -67,11 +67,7 @@ public class MouseMover implements WorkerService {
              robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
              robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
          }
-         else if(message.equalsIgnoreCase("sTap")){
-             robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
-             robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-         }
-         else if(message.equalsIgnoreCase("dTap")){
+         else if(message.equalsIgnoreCase("drag")){
              if(!releaseMouse){
                 robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
                 releaseMouse = true;
