@@ -19,7 +19,7 @@ public class WriteHandler implements Runnable{
         //pinging the client every 2 minutes
         while(true){
             try {
-                dataOutputStream.write(pingData.getBytes());
+                dataOutputStream.writeUTF(pingData);
                 Thread.sleep(1000*60*2);
             }catch (IOException ioe){
                 ioe.printStackTrace();
