@@ -1,6 +1,7 @@
 package com.nitish.BluetoothServer;
 
 import com.nitish.Handlers.ReadHandler;
+import com.nitish.Handlers.WriteHandler;
 import com.nitish.Service.Worker.WorkerService;
 
 import javax.bluetooth.*;
@@ -29,6 +30,7 @@ public class BluetoothServer {
         {
             try {
                 acceptConnection();
+                pingClient(connection);
                 showConnectedDevice(connection);
                 readData(connection);
             }catch (IOException ioe){
@@ -64,6 +66,13 @@ public class BluetoothServer {
         ReadHandler runnableThread = new ReadHandler(connection.openInputStream(),worker);
         Thread messageHandler = new Thread(runnableThread);
         messageHandler.start();
+    }
+
+    public void pingClient(StreamConnection connection) throws IOException{
+        WriteHandler writeHandler = new WriteHandler(connection.openOutputStream());
+        Thread pingThread = new Thread(writeHandler);
+        pingThread.start();
+
     }
 
 }
