@@ -21,6 +21,7 @@ public class BluetoothClient extends Thread{
             this.myDevice = myDevice;
             clientScoket = myDevice.createRfcommSocketToServiceRecord(UUID.fromString(myUUID));
         }catch (IOException ioe){
+
             Log.v("BluetoothClient","Socket Creation failed");
         }
     }

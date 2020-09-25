@@ -56,8 +56,7 @@ public class TouchDetectActivity extends AppCompatActivity {
         connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-              if(!connectionStatus.getConnectionStatus()){
+              if(!connectionStatus.getConnectionStatus() ){
                   BluetoothClient connectDevices = new BluetoothClient(device);
                   connectDevices.start();
                   socket = connectDevices.getSocket();
