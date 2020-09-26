@@ -17,12 +17,10 @@ public class ConnectedThread extends Thread {
     private InputStream input;
     private DataOutputStream output;
     private BluetoothSocket socket;
-    private ConnectionStatus connectionStatus;
     private String message;
-    public ConnectedThread(BluetoothSocket socket, String message, ConnectionStatus connectionStatus){
+    public ConnectedThread(BluetoothSocket socket, String message){
         this.socket = socket;
         this.message = message;
-        this.connectionStatus = connectionStatus;
         try{
             input = socket.getInputStream();
             output = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
@@ -45,9 +43,9 @@ public class ConnectedThread extends Thread {
             output.write(messageInBytes);
             output.flush();
             Log.v("connectedThread","message Sent");
+
         }catch(IOException ioe)
         {
-            connectionStatus.setConnectionStatus(false);
             Log.v("connectedThead","Cannot write the output");
             ioe.printStackTrace();
         }

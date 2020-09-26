@@ -36,7 +36,7 @@ public class TouchDetectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(connectionStatus.getConnectionStatus()) {
-                    ConnectedThread messageSender = new ConnectedThread(socket, "left",connectionStatus);
+                    ConnectedThread messageSender = new ConnectedThread(socket, "left");
                     messageSender.start();
 
                 }
@@ -46,7 +46,7 @@ public class TouchDetectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(connectionStatus.getConnectionStatus()) {
-                    ConnectedThread messageSender = new ConnectedThread(socket, "right",connectionStatus);
+                    ConnectedThread messageSender = new ConnectedThread(socket, "right");
                     messageSender.start();
                 }
 
@@ -57,7 +57,7 @@ public class TouchDetectActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
               if(!connectionStatus.getConnectionStatus() ){
-                  BluetoothClient connectDevices = new BluetoothClient(device);
+                  BluetoothClient connectDevices = new BluetoothClient(device,connectionStatus);
                   connectDevices.start();
                   socket = connectDevices.getSocket();
                   connectionStatus.setConnectionStatus(true);
@@ -76,7 +76,7 @@ public class TouchDetectActivity extends AppCompatActivity {
                 public boolean onDoubleTap(MotionEvent event) {
                     Log.v("messageSender","dTap");
                     if(connectionStatus.getConnectionStatus()) {
-                        ConnectedThread messageSender = new ConnectedThread(socket, "right", connectionStatus);
+                        ConnectedThread messageSender = new ConnectedThread(socket, "right");
                         messageSender.start();
                     }
                     return super.onDoubleTap(event);
@@ -86,7 +86,7 @@ public class TouchDetectActivity extends AppCompatActivity {
                 public boolean onSingleTapUp(MotionEvent event) {
                     if(connectionStatus.getConnectionStatus()){
                         Log.v("messageSender","single tap");
-                        ConnectedThread messageSender = new ConnectedThread(socket,"left",connectionStatus);
+                        ConnectedThread messageSender = new ConnectedThread(socket,"left");
                         messageSender.start();
                     }
                     return super.onSingleTapUp(event);
@@ -95,7 +95,7 @@ public class TouchDetectActivity extends AppCompatActivity {
                 @Override
                 public void onLongPress(MotionEvent e) {
                     if(connectionStatus.getConnectionStatus()){
-                        ConnectedThread messageSender = new ConnectedThread(socket,"drag",connectionStatus);
+                        ConnectedThread messageSender = new ConnectedThread(socket,"drag");
                         messageSender.start();
                     }
                 }
@@ -106,7 +106,7 @@ public class TouchDetectActivity extends AppCompatActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 gestureDetector.onTouchEvent(event);
                 if(connectionStatus.getConnectionStatus()) {
-                    ConnectedThread messageSender = new ConnectedThread(socket, event.getX() + ":" + event.getY(),connectionStatus);
+                    ConnectedThread messageSender = new ConnectedThread(socket, event.getX() + ":" + event.getY());
                     messageSender.start();
                 }
                 return true;
